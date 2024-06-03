@@ -13,7 +13,6 @@ global graph_matrix
     
 def showDirectedGraph(id_to_words, path=None, distance=None, show_path=False):
     
-    
     G = nx.from_numpy_array(graph_matrix, create_using=nx.DiGraph)
     H = nx.relabel_nodes(G, id_to_words)
     pos = nx.spring_layout(H,seed=7)  # 生成节点位置
