@@ -272,11 +272,3 @@ if __name__ == '__main__':
                 calcShortestPath(num,word1,"",one_word,show_all)
         if case==5:
             print(randomWalk())
-
-
-    
-    
-
-    
-        
-
