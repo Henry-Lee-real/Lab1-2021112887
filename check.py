@@ -1,16 +1,14 @@
 import unittest
-from test import add, subtract
+from lab import queryBridgeWords
 
 class TestMathModule(unittest.TestCase):
     def test_add(self):
-        self.assertEqual(add(1, 2), 3)
-        self.assertEqual(add(-1, 1), 0)
-        self.assertEqual(add(-1, -1), -2)
-
-    def test_subtract(self):
-        self.assertEqual(subtract(10, 5), 5)
-        self.assertEqual(subtract(-1, 1), -2)
-        self.assertEqual(subtract(2, 3), -1)
+        self.assertEqual(queryBridgeWords("to", "new"), 
+                         "The bridge words from \"to\" to \"new\" are: seek, and day")
 
 if __name__ == '__main__':
     unittest.main()
+
+# self.assertEqual(queryBridgeWords("to", ""), "No \"\" in the graph!")
+        # self.assertEqual(queryBridgeWords("got", "new"), "No \"got\" in the graph!")
+        # self.assertEqual(queryBridgeWords("got", "sad233"), "No \"got\" and \"sad233\" in the graph!")

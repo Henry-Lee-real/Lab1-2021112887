@@ -5,10 +5,10 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import random
 
-# words_list=[]
-# words_to_id={}
-# id_to_words={}
-# global graph_matrix
+words_list=[]
+words_to_id={}
+id_to_words={}
+global graph_matrix
 
     
 def showDirectedGraph(id_to_words, path=None, distance=None, show_path=False):
@@ -39,8 +39,6 @@ def showDirectedGraph(id_to_words, path=None, distance=None, show_path=False):
     plt.show()
 
 def queryBridgeWords(word1,word2,default=False):
-    
-    graph_matrix,words_to_id,id_to_words = init()
        
     if word1 not in words_to_id and word2 not in words_to_id:
         if default:
@@ -215,22 +213,19 @@ def calcShortestPath(num,word1,word2,one_word,show_all):
         
     
 def load_data(file_path):
-    words_list = []
+    global words_list 
     with open(file_path, 'r') as file:
         text = file.read().lower()  
         words_list = re.findall(r'\b\w+\b', text)
     length=len(words_list)
     idx=0
-    
-    words_to_id={}
-    id_to_words={}
-    
+
     for i in words_list:
         if i not in words_to_id:
             words_to_id[i]=idx
             id_to_words[idx]=i
             idx+=1
-    return length,idx,words_to_id,id_to_words,words_list
+    return length,idx
 
 def get_args_parser():
     parser = argparse.ArgumentParser('LAB1', add_help=False)
@@ -238,14 +233,14 @@ def get_args_parser():
     return parser
         
         
+
         
-        
-def init():
+if __name__ == '__main__':
     args = get_args_parser()
     args = args.parse_args()
     if not args.file_path:
         args.file_path=input("please input your file path:")
-    length,num,words_to_id,id_to_words,words_list = load_data(args.file_path)
+    length,num = load_data(args.file_path)
     
     graph_matrix=np.zeros((num,num))
 
@@ -253,46 +248,31 @@ def init():
         x=words_list[i]
         y=words_list[i+1]
         graph_matrix[words_to_id[x]][words_to_id[y]]+=1
-    return graph_matrix,words_to_id,id_to_words
+    
+    while(True):
+    
+        case = int(input("choose(show:1,query:2,generate:3,calculate:4,random:5):"))
         
-# if __name__ == '__main__':
-#     args = get_args_parser()
-#     args = args.parse_args()
-#     if not args.file_path:
-#         args.file_path=input("please input your file path:")
-#     length,num = load_data(args.file_path)
-    
-#     graph_matrix=np.zeros((num,num))
-
-#     for i in range(length-1):
-#         x=words_list[i]
-#         y=words_list[i+1]
-#         graph_matrix[words_to_id[x]][words_to_id[y]]+=1
-    
-    # while(True):
-    
-    #     case = int(input("choose(show:1,query:2,generate:3,calculate:4,random:5):"))
-        
-    #     # sentence = "Seek to explore new and exciting synergies"
-    #     # print(generateNewText(sentence))
-    #     if case==1:
-    #         showDirectedGraph(id_to_words)
-    #     if case==2:
-    #         word1 = input("word1:").lower()
-    #         word2 = input("word2:").lower()
-    #         print(queryBridgeWords(word1,word2))
-    #     if case==3:
-    #         sentence = input("sentence:")
-    #         print(generateNewText(sentence))
-    #     if case==4:
-    #         one_word=bool(input("one_word:"))
-    #         word1 = input("begin:").lower()
-    #         if not one_word:
-    #             word2 = input("end:").lower()
-    #         show_all=bool(input("show_all:"))
-    #         if not one_word:
-    #             calcShortestPath(num,word1,word2,one_word,show_all)
-    #         else:
-    #             calcShortestPath(num,word1,"",one_word,show_all)
-    #     if case==5:
-    #         print(randomWalk())
+        # sentence = "Seek to explore new and exciting synergies"
+        # print(generateNewText(sentence))
+        if case==1:
+            showDirectedGraph(id_to_words)
+        if case==2:
+            word1 = input("word1:").lower()
+            word2 = input("word2:").lower()
+            print(queryBridgeWords(word1,word2))
+        if case==3:
+            sentence = input("sentence:")
+            print(generateNewText(sentence))
+        if case==4:
+            one_word=bool(input("one_word:"))
+            word1 = input("begin:").lower()
+            if not one_word:
+                word2 = input("end:").lower()
+            show_all=bool(input("show_all:"))
+            if not one_word:
+                calcShortestPath(num,word1,word2,one_word,show_all)
+            else:
+                calcShortestPath(num,word1,"",one_word,show_all)
+        if case==5:
+            print(randomWalk())
