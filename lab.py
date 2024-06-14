@@ -40,7 +40,7 @@ def showDirectedGraph(id_to_words, path=None, distance=None, show_path=False):
 
 def queryBridgeWords(word1,word2,default=False):
     
-    graph_matrix,words_to_id,id_to_words = init()
+    graph_matrix,words_to_id,id_to_words,length,num = init()
        
     if word1 not in words_to_id and word2 not in words_to_id:
         if default:
@@ -135,7 +135,9 @@ def randomWalk():
         out_sentence += (i+" ")
     return out_sentence.strip()
     
-def dijkstra_all(src, num):
+def dijkstra_all(src,num):
+    graph_matrix,words_to_id,id_to_words,length,num = init()
+    # src=words_to_id[word1]
     new_matrix=np.copy(graph_matrix)
     #np.fill_diagonal(new_matrix, -np.inf)
     new_matrix[new_matrix == 0] = np.inf
@@ -178,7 +180,8 @@ def dijkstra_all(src, num):
 
     return distances, all_paths
 
-def calcShortestPath(num,word1,word2,one_word,show_all):
+def calcShortestPath(word1,word2,one_word,show_all):
+    graph_matrix,words_to_id,id_to_words,length,num = init()
     u=words_to_id[word1]
     distances,all_paths=dijkstra_all(u,num)
     print(all_paths)
@@ -186,32 +189,27 @@ def calcShortestPath(num,word1,word2,one_word,show_all):
         if show_all:
             for paths,dist in zip(all_paths,distances):
                 if all_paths[paths]==[]:
-                    print(f"It's impossible to reach {id_to_words[paths]} from {word1}")
+                    return f"It's impossible to reach {id_to_words[paths]} from {word1}"
                 else:
-                    for path in all_paths[paths]:
-                        showDirectedGraph(id_to_words,path,dist,True)
-            return 
+                    print(all_paths[paths])
+            return "show_all_one_word"
         else:
             for paths,dist in zip(all_paths,distances):
                 if all_paths[paths]==[]:
-                    print(f"It's impossible to reach {id_to_words[paths]} from {word1}")
+                    return f"It's impossible to reach {id_to_words[paths]} from {word1}"
                 else:
-                    showDirectedGraph(id_to_words,all_paths[paths][0],dist,True)
-            return
+                    print(all_paths[paths][0])
+            return "show_one_one_word"
     else:
         v=words_to_id[word2]
         dist=distances[v]
         paths=all_paths[v]
         if paths==[]:
-            print(f"It's impossible to reach {word2} from {word1}")
-            return 
+            return f"It's impossible to reach {word2} from {word1}"
         if show_all:
-            for path in paths:
-                showDirectedGraph(id_to_words,path,dist,True)
-            return
+            return "show_all_two_words"
         else:
-            showDirectedGraph(id_to_words,paths[0],dist,True)
-            return   
+            return  "show_one_two_words"
         
     
 def load_data(file_path):
@@ -234,7 +232,7 @@ def load_data(file_path):
 
 def get_args_parser():
     parser = argparse.ArgumentParser('LAB1', add_help=False)
-    parser.add_argument('--file_path', default="text.txt", type=str)
+    parser.add_argument('--file_path', default="text2.txt", type=str)
     return parser
         
         
@@ -253,8 +251,10 @@ def init():
         x=words_list[i]
         y=words_list[i+1]
         graph_matrix[words_to_id[x]][words_to_id[y]]+=1
-    return graph_matrix,words_to_id,id_to_words
+    return graph_matrix,words_to_id,id_to_words,length,num
         
+# out = calcShortestPath("to",None,1,1)
+# print(out)
 # if __name__ == '__main__':
 #     args = get_args_parser()
 #     args = args.parse_args()
